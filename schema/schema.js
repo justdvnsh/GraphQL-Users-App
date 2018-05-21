@@ -1,5 +1,5 @@
 const graphql = require('graphql');
-const _ = require('lodash');
+const axios = require('axios');
 
 const {
   GraphQLObjectType,
@@ -31,7 +31,9 @@ const RootQuery = new GraphQLObjectType({
       resolve(parentValue, args) {
         // The fuction where we actually go into the database and fetch
         // some real data.
-        return _.find(users, { id: args.id }) // args.id would be provided during the query call.
+        return axios.get(`http://localhost:3000/users/${args.id}`)
+                .then(resp => resp.data) // args.id would be provided during the query call.
+                // resp.data is used because , axios nests the data into the data property of response.
       }
     }
   }
